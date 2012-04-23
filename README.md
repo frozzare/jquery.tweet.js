@@ -27,7 +27,7 @@ This will load one tweet (include rts) from the username you specified and show 
 * show - The amout of tweets to show. Default 0 (show all)
 * list - Append li tags around every tweets. Defult false
 * avatar - Show avatar. Default false
-* https - Use https instead of http. Default false
+* https - Use https instead of http. Default false (No need to set this to true when https is the default protocol)
 
 ### Examples
 
