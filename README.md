@@ -1,6 +1,6 @@
 # jQuery.tweet.js
 
-A jQuery plugin that display latest tweet on your site, blog or wathever. It's easy to use. It will auto format the hash tag, links and name.
+A jQuery plugin that displays tweet(s) on your site, blog or wathever. It's easy to use. It will auto format the hash tag, links and name.
 
 This plugin include the `relative_time` function from Twitters blogger.js file.
 
@@ -15,7 +15,8 @@ This will load one tweet (include rts) from the username you specified and show 
 		
 	$('.tweet').tweet('frozzare');
 
-		
+[Example file](https://github.com/Frozzare/jquery.tweet.js/blob/master/examples/basic.html)
+
 ### Options 
 
 * screen_name or username - The user to load tweets from
@@ -26,7 +27,7 @@ This will load one tweet (include rts) from the username you specified and show 
 * show - The amout of tweets to show. Default 0 (show all)
 * list - Append li tags around every tweets. Defult false
 * avatar - Show avatar. Default false
-* protocol - Load via http or https. Default the browser will decied between https and http or it will http.
+* https - Use https instead of http. Default false
 
 ### Examples
 
@@ -40,16 +41,22 @@ This will load one tweet (include rts) from the username you specified and show 
 		count: 5
 	});
 	
+[Example file](https://github.com/Frozzare/jquery.tweet.js/blob/master/examples/list.html)
+
 #### Avatar example
 
-	<p class="tweet">Loading tweet</p>
+	<ul class="tweets">Loading tweet</ul>
 	
 	$('.tweet').tweet({
 		screen_name: 'frozzare',
-		avatar: true
+		avatar: true,
+		list: true,
+		count: 5
 	});
 	
 	<p class="tweet"><img src="…"> tweet</p>
+
+[Example file](https://github.com/Frozzare/jquery.tweet.js/blob/master/examples/avatar.html)
 	
 ### Advanced
 

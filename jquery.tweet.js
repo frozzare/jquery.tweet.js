@@ -18,7 +18,7 @@
         show: 0,
         list: false,
         avatar: false,
-        protocol: document.location.protocol.substr(0, 4) === 'http' ? document.location.protocol : 'http:'
+        https: false
       };
 
   function Tweet(element, options) {
@@ -41,7 +41,14 @@
 
     options.callback = 'tweets.' + guid + '.twitterCallback';
 
+    if (options.https) {
+      this.protocol = 'https:';
+    } else {
+      this.protocol = document.location.protocol.substr(0, 4) === 'http' ? document.location.protocol : 'http:';
+    }
+    
     this.options = $.extend({}, defaults, options);
+
     this._defaults = defaults;
     this._screen_name = options.screen_name;
 
@@ -63,7 +70,7 @@
 
       if (this.options.avatar) {
         var key = 'profile_image_url';
-        if (this.options.protocol === 'https:') {
+        if (this.protocol === 'https:') {
           key = key + '_https';
         }
         status = '<img src="' + tweet.user[key] + '" title="' + tweet.user.name + '" />' + status;
@@ -100,8 +107,8 @@
 
     url: function () {
       var params = $.extend({}, this.options),
-        keys = ['list', 'avatar', 'protocol', 'show'],
-        url = this.options.protocol + '//api.twitter.com/1/statuses/user_timeline.json?';
+        keys = ['list', 'avatar', 'https', 'show'],
+        url = this.protocol + '//api.twitter.com/1/statuses/user_timeline.json?';
 
       for (var i = 0; i < keys.length; i++) {
         delete params[keys[i]];
