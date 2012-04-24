@@ -2,8 +2,6 @@
 
 A jQuery plugin that displays tweet(s) on your site, blog or wathever. It's easy to use. It will auto format the hash tag, links and name.
 
-This plugin include the `relative_time` function from Twitters blogger.js file.
-
 You can load as many accounts at the time you like with this plugin. It will give every account it load a unique id.
 
 __Note__ It will do one request to the Twitter API for each account.
@@ -19,6 +17,7 @@ This will load one tweet (include rts) from the username you specified and show 
 
 ### Options 
 
+* id - Load a specific tweet by the tweet id, must be a string value. Default empty
 * screen_name or username - The user to load tweets from
 * include_rts - Include retweets or not. Default true
 * max_id - Results with an ID less than (that is, older than) or equal to the specified ID.
@@ -45,7 +44,7 @@ This will load one tweet (include rts) from the username you specified and show 
 
 #### Avatar example
 
-	<ul class="tweets">Loading tweet</ul>
+	<ul class="tweets">Loading tweets</ul>
 	
 	$('.tweet').tweet({
 		screen_name: 'frozzare',
@@ -58,6 +57,18 @@ This will load one tweet (include rts) from the username you specified and show 
 
 [Example file](https://github.com/Frozzare/jquery.tweet.js/blob/master/examples/avatar.html)
 	
+#### Tweet ID example
+
+	<p class="tweet">Loading tweets</p>
+	
+	$('.tweet').tweet({ id: '194120642130477056' });
+
+Or you can use the shortcut string
+
+	$('.tweet').tweet('id:194120642130477056');
+
+[Example file](https://github.com/Frozzare/jquery.tweet.js/blob/master/examples/tweetid.html)
+
 ### Advanced
 
 You can get the object that's created when you run `$().tweet()` is store in a unique object that you can access with `$.getTweet()` function. 
@@ -73,3 +84,8 @@ If you request the user timeline once, the function will return  object else arr
 Every Tweet object has an array called `tweets` that store all tweets you request from Twitter API.
 
 All tweets for each user is store in `window.tweets` object.
+
+### Changelog
+
+* 0.5 - First release
+* 0.6 - Adding build system, Tweet id options, fixing radix errors

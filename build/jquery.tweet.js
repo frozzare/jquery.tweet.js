@@ -4,7 +4,7 @@
  * Version: 0.5
  * Licensed under the MIT license http://frozzare.mit-license.org
  */
-;(function ($, window, document, undefined) {
+(function ($, window, document, undefined) {
 
   "use strict";
 
@@ -24,11 +24,17 @@
   function Tweet(element, options) {
 
     this.element = $(element);
-
+    
     if (typeof options === 'string') {
-      options = {
-        screen_name: options
-      };
+      if (options.indexOf('id:') === -1) {
+        options = {
+          screen_name: options
+        };
+      } else {
+        options = {
+          id: options.replace('id:', '')
+        };
+      }
     } else if (options.username !== undefined) {
       options.screen_name = options.username;
       delete options.username;
@@ -57,8 +63,12 @@
 
   Tweet.prototype = {
 
+    isArray: function (a) {
+      return a instanceof Array;
+    },
+
     status: function (tweet) {
-      var status = tweet.text.replace(/((https?|s?ftp|ssh)\:\/\/[^"\s\<\>]*[^.,;'">\:\s\<\>\)\]\!])/g, function (url) {
+      var status = tweet.text.replace(/((https?|s?ftp|ssh)\:\/\/[^"\s\>]*[^.,;'">\:\s\>\)\]\!])/g, function (url) {
         return '<a href="' + url + '">' + url + '</a>';
       }).replace(/\B@([_a-z0-9]+)/ig, function (reply) {
         return '<a href="http://twitter.com/' + reply.substring(1) + '">' + reply + '</a>';
@@ -85,7 +95,7 @@
       time_value = values[1] + " " + values[2] + ", " + values[5] + " " + values[3];
       var parsed_date = Date.parse(time_value);
       var relative_to = (arguments.length > 1) ? arguments[1] : new Date();
-      var delta = parseInt((relative_to.getTime() - parsed_date) / 1000);
+      var delta = parseInt((relative_to.getTime() - parsed_date) / 1000, 10);
       delta = delta + (relative_to.getTimezoneOffset() * 60);
 
       if (delta < 60) {
@@ -93,51 +103,60 @@
       } else if (delta < 120) {
         return 'about a minute ago';
       } else if (delta < (60 * 60)) {
-        return (parseInt(delta / 60)).toString() + ' minutes ago';
+        return (parseInt(delta / 60, 10)).toString() + ' minutes ago';
       } else if (delta < (120 * 60)) {
         return 'about an hour ago';
       } else if (delta < (24 * 60 * 60)) {
-        return 'about ' + (parseInt(delta / 3600)).toString() + ' hours ago';
+        return 'about ' + (parseInt(delta / 3600, 10)).toString() + ' hours ago';
       } else if (delta < (48 * 60 * 60)) {
         return '1 day ago';
       } else {
-        return (parseInt(delta / 86400)).toString() + ' days ago';
+        return (parseInt(delta / 86400, 10)).toString() + ' days ago';
       }
     },
 
     url: function () {
       var params = $.extend({}, this.options),
-        keys = ['list', 'avatar', 'https', 'show'],
-        url = this.protocol + '//api.twitter.com/1/statuses/user_timeline.json?';
+        keys = ['list', 'avatar', 'https', 'show'];
 
-      for (var i = 0; i < keys.length; i++) {
-        delete params[keys[i]];
+      if (this.options.id !== undefined) {
+        return this.protocol + '//api.twitter.com/1/statuses/show/' + this.options.id + '.json?' + $.param({ callback: this.options.callback });
+      } else {
+        var url = this.protocol + '//api.twitter.com/1/statuses/user_timeline.json?';
+
+        for (var i = 0; i < keys.length; i++) {
+          delete params[keys[i]];
+        }
+
+        // Delete since_id if it zero
+        if (params.since_id === 0) {
+          delete params.since_id;
+        }
+
+        // Delete max_id if it zero
+        if (params.max_id === 0) {
+          delete params.max_id;
+        }
+
+        return url + $.param(params);
       }
-
-      // Delete since_id if it zero
-      if (params.since_id === 0) {
-        delete params.since_id;
-      }
-
-      // Delete max_id if it zero
-      if (params.max_id === 0) {
-        delete params.max_id;
-      }
-
-      return url + $.param(params);
     },
 
     twitterCallback: function (data) {
       var key   = 'html',
-          show  = this.options.show === 0 ? data.length : this.options.show;
+          show  = this.options.show !== 0 ? this.options.show : this.isArray(data) ? data.length : 1;
 
-      this.tweets = data;
-
+      if (this.isArray(data)) {
+        this.tweets = data;
+      } else {
+        this.tweets = [data];
+      }
+      
       if (this.tweets.length > 1 || this.options.list) {
         key = 'append';
         this.element.empty();
-      }
-
+      }  
+    
       for (var i = 0; i < show; i++) {
         if (this.options.list) {
           this.element[key]('<li>' + this.status(this.tweets[i]) + '</li>');
@@ -164,7 +183,7 @@
   $.fn.tweet = function (options) {
     return this.each(function () {
       window.tweets = window.tweets || {};
-      guid = 'tweet' + (+new Date).toString();
+      guid = 'tweet' + (+new Date() ).toString();
       window.tweets[guid] = new Tweet(this, options);
     });
   };
