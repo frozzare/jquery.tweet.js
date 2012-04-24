@@ -4,15 +4,16 @@
 
   var guid      = '',
       defaults  = {
-        screen_name: '',
-        include_rts: true,
-        max_id: 0,
-        since_id: 0,
-        count: 1,
-        show: 0,
-        list: false,
-        avatar: false,
-        https: false
+        id: null,             // [string] Load specific tweet by id.
+        screen_name: '',      // [string] Load tweets from this user.
+        include_rts: true,    // [boolean] Include Retweets.
+        max_id: 0,            // [integer] Results with an ID less than (that is, older than) or equal to the specified ID.
+        since_id: 0,          // [integer] Results with an ID greater than (that is, more recent than) the specified ID. 
+        count: 1,             // [integer] The amount of tweets to load.
+        show: 0,              // [integer] The amount of tweets to show.
+        list: false,          // [boolean] Append li tags around every tweets.
+        avatar: false,        // [boolean] Show avatar.
+        https: false          // [boolean] Use https instead of http. https will be used when https protocol is used.
       };
 
   function Tweet(element, options) {
@@ -111,9 +112,9 @@
 
     url: function () {
       var params = $.extend({}, this.options),
-        keys = ['list', 'avatar', 'https', 'show'];
+        keys = ['list', 'avatar', 'https', 'show', 'id'];
 
-      if (this.options.id !== undefined) {
+      if (this.options.id !== null) {
         return this.protocol + '//api.twitter.com/1/statuses/show/' + this.options.id + '.json?' + $.param({ callback: this.options.callback });
       } else {
         var url = this.protocol + '//api.twitter.com/1/statuses/user_timeline.json?';
