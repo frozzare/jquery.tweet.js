@@ -85,6 +85,11 @@ Every Tweet object has an array called `tweets` that store all tweets you reques
 
 All tweets for each user is store in `window.tweets` object.
 
+### Build
+
+	npm install smoosh
+	node build.js
+
 ### Changelog
 
 * 0.5 - First release
