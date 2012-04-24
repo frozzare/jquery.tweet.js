@@ -1,7 +1,7 @@
 /*!
  * jQuery tweet
  * Copyright 2012 Fredrik Forsmo, @frozzare
- * Version: 0.5
+ * Version: 0.6
  * Licensed under the MIT license http://frozzare.mit-license.org
  */
 (function ($, window, document, undefined) {
@@ -90,7 +90,7 @@
     },
 
     relative_time: function (time_value) {
-      // relative time is from Twitters JavaScript blogger.js file
+      // Modified versio nof relative time function from Twitters JavaScript blogger.js file
       var values = time_value.split(" ");
       time_value = values[1] + " " + values[2] + ", " + values[5] + " " + values[3];
       var parsed_date = Date.parse(time_value);
