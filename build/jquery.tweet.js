@@ -1,31 +1,31 @@
 /*!
  * jQuery tweet
  * Copyright 2012 Fredrik Forsmo, @frozzare
- * Version: 0.6
+ * Version: 0.6.1
  * Licensed under the MIT license http://frozzare.mit-license.org
  */
 (function ($, window, document, undefined) {
 
   "use strict";
 
-  var guid      = '',
-      defaults  = {
-        id: null,             // [string] Load specific tweet by id.
-        screen_name: '',      // [string] Load tweets from this user.
-        include_rts: true,    // [boolean] Include Retweets.
-        max_id: 0,            // [integer] Results with an ID less than (that is, older than) or equal to the specified ID.
-        since_id: 0,          // [integer] Results with an ID greater than (that is, more recent than) the specified ID. 
-        count: 1,             // [integer] The amount of tweets to load.
-        show: 0,              // [integer] The amount of tweets to show.
-        list: false,          // [boolean] Append li tags around every tweets.
-        avatar: false,        // [boolean] Show avatar.
-        https: false          // [boolean] Use https instead of http. https will be used when https protocol is used.
+  var guid = '',
+      defaults = {
+        id: null,               // [string] Load specific tweet by id.
+        screen_name: '',        // [string] Load tweets from this user.
+        include_rts: true,      // [boolean] Include Retweets.
+        max_id: 0,              // [integer] Results with an ID less than (that is, older than) or equal to the specified ID.
+        since_id: 0,            // [integer] Results with an ID greater than (that is, more recent than) the specified ID. 
+        count: 1,               // [integer] The amount of tweets to load.
+        show: 0,                // [integer] The amount of tweets to show.
+        list: false,            // [boolean] Append li tags around every tweets.
+        avatar: false,          // [boolean] Show avatar.
+        https: false            // [boolean] Use https instead of http. https will be used when https protocol is used.
       };
 
   function Tweet(element, options) {
 
     this.element = $(element);
-    
+
     if (typeof options === 'string') {
       if (options.indexOf('id:') === -1) {
         options = {
@@ -36,9 +36,6 @@
           id: options.replace('id:', '')
         };
       }
-    } else if (options.username !== undefined) {
-      options.screen_name = options.username;
-      delete options.username;
     }
 
     if (!options.include_rts && options.count === 1) {
@@ -53,51 +50,42 @@
     } else {
       this.protocol = document.location.protocol.substr(0, 4) === 'http' ? document.location.protocol : 'http:';
     }
-    
+
     this.options = $.extend({}, defaults, options);
-
-    this._defaults = defaults;
-    this._screen_name = options.screen_name;
-
-    $.getScript(this.url());
+    
+    $.getScript(this.url());      
   }
 
   Tweet.prototype = {
-
+    
     isArray: function (a) {
       return a instanceof Array;
     },
-
+    
     status: function (tweet) {
-      var status = tweet.text.replace(/((https?|s?ftp|ssh)\:\/\/[^"\s\>]*[^.,;'">\:\s\>\)\]\!])/g, function (url) {
-        return '<a href="' + url + '">' + url + '</a>';
-      }).replace(/\B@([_a-z0-9]+)/ig, function (reply) {
-        return '<a href="http://twitter.com/' + reply.substring(1) + '">' + reply + '</a>';
-      }).replace(/\B#([_a-z0-9\.]+)/ig, function (hashtag) {
-        return '<a href="http://twitter.com/search?q=%23' + hashtag.substring(1) + '">' + hashtag + '</a>';
-      });
+      var self = this,
+          status = tweet.text.replace(/((https?|s?ftp|ssh)\:\/\/[^"\s\>]*[^.,;'">\:\s\>\)\]\!])/g, function (url) {
+            return '<a href="' + url + '">' + url + '</a>';
+          }).replace(/\B@([_a-z0-9]+)/ig, function (reply) {
+            return '<a href="' + self.protocol + '//twitter.com/' + reply.substring(1) + '">' + reply + '</a>';
+          }).replace(/\B#([_a-z0-9\.]+)/ig, function (hashtag) {
+            return '<a href="' + self.protocol + '//twitter.com/search?q=%23' + hashtag.substring(1) + '">' + hashtag + '</a>';
+          });
 
-      status = '<span>' + status + '</span> <a title="Details" href="http://twitter.com/' + this.options.screen_name + '/statuses/' + tweet.id_str + '">' + this.relative_time(tweet.created_at) + '</a>';
+      status = '<span>' + status + '</span> <a href="' + this.protocol + '//twitter.com/' + this.options.screen_name + '/statuses/' + tweet.id_str + '">' + this.relative_time(tweet.created_at) + '</a>';
 
       if (this.options.avatar) {
-        var key = 'profile_image_url';
-        if (this.protocol === 'https:') {
-          key = key + '_https';
-        }
-        status = '<img src="' + tweet.user[key] + '" title="' + tweet.user.name + '" />' + status;
+        status = '<img src="' + tweet.user[this.protocol === 'https:' ? 'profile_image_url_https' : 'profile_image_url'] + '" title="' + tweet.user.name + '" />' + status;
       }
 
       return status;
     },
 
     relative_time: function (time_value) {
-      // Modified versio nof relative time function from Twitters JavaScript blogger.js file
-      var values = time_value.split(" ");
-      time_value = values[1] + " " + values[2] + ", " + values[5] + " " + values[3];
-      var parsed_date = Date.parse(time_value);
-      var relative_to = (arguments.length > 1) ? arguments[1] : new Date();
-      var delta = parseInt((relative_to.getTime() - parsed_date) / 1000, 10);
-      delta = delta + (relative_to.getTimezoneOffset() * 60);
+      // Modified versio nof relative time function from Twitters JavaScript blogger.js file      
+      var values = time_value.split(" "),
+          parsed_date = Date.parse(values[1] + ' ' + values[2] + ', ' + values[5] + ' ' + values[3]),
+          delta = (parseInt((new Date().getTime() - parsed_date) / 1000, 10) * 2) + (new Date().getTimezoneOffset() * 60);
 
       if (delta < 60) {
         return 'less than a minute ago';
@@ -118,16 +106,16 @@
 
     url: function () {
       var params = $.extend({}, this.options),
-        keys = ['list', 'avatar', 'https', 'show', 'id'];
+          keys = ['list', 'avatar', 'https', 'show', 'id'];
 
       if (this.options.id !== null) {
-        return this.protocol + '//api.twitter.com/1/statuses/show/' + this.options.id + '.json?' + $.param({ callback: this.options.callback });
+        return this.protocol + '//api.twitter.com/1/statuses/show/' + this.options.id + '.json?' + $.param({
+          callback: this.options.callback
+        });
       } else {
-        var url = this.protocol + '//api.twitter.com/1/statuses/user_timeline.json?';
-
-        for (var i = 0; i < keys.length; i++) {
-          delete params[keys[i]];
-        }
+        $.each(keys, function (index, value) {
+          delete params[value];
+        });
 
         // Delete since_id if it zero
         if (params.since_id === 0) {
@@ -139,13 +127,12 @@
           delete params.max_id;
         }
 
-        return url + $.param(params);
+        return this.protocol + '//api.twitter.com/1/statuses/user_timeline.json?' + $.param(params);
       }
     },
 
     twitterCallback: function (data) {
-      var key   = 'html',
-          show  = this.options.show !== 0 ? this.options.show : this.isArray(data) ? data.length : 1;
+      var show = this.options.show !== 0 ? this.options.show : this.isArray(data) ? data.length : 1;
 
       if (this.isArray(data)) {
         this.tweets = data;
@@ -153,43 +140,48 @@
         this.tweets = [data];
       }
       
-      if (this.tweets.length > 1 || this.options.list) {
-        key = 'append';
-        this.element.empty();
-      }  
-    
+      if (this.options.id !== null) {
+        // Multi ID support will come
+        this.options.screen_name = this.tweets[0].user.screen_name;
+      }
+      
+      this.element.empty();
+      
       for (var i = 0; i < show; i++) {
         if (this.options.list) {
-          this.element[key]('<li>' + this.status(this.tweets[i]) + '</li>');
+          this.element.append($('<li />', { 'data-tweet': this.tweets[i].id_str }).append(this.status(this.tweets[i])));
         } else {
-          this.element[key](this.status(this.tweets[i]));
+          this.element.append($('<span />', { 'data-tweet': this.tweets[i].id_str }).append(this.status(this.tweets[i])));
         }
       }
     },
 
-    getTweet: function (screen_name) {
-      var tweets = [];
-      for (var key in window.tweets) {
-        if (window.tweets[key]._screen_name === screen_name) {
-          tweets.push({
-            tweets: window.tweets[key].tweets,
-            screen_name: window.tweets[key]._screen_name
+    get: function (screen_name) {
+      var tweets = [],
+          _tweets = window.tweets;
+
+      $.each(_tweets, function (key) {
+        if (_tweets[key].options.screen_name.toLowerCase() === screen_name.toLowerCase()) {
+          $.each(_tweets[key].tweets, function (index, value) {
+            tweets.push(value);
           });
         }
-      }
+      });
+      
       return tweets.length === 1 ? tweets[0] : tweets;
     }
   };
 
   $.fn.tweet = function (options) {
     return this.each(function () {
-      window.tweets = window.tweets || {};
-      guid = 'tweet' + (+new Date() ).toString();
+      guid = 't' + (+new Date()).toString();
       window.tweets[guid] = new Tweet(this, options);
     });
   };
 
-  // Alias for getTweet function, it should be easy to access.
-  $.getTweet = Tweet.prototype.getTweet;
+  window.tweets = {};
 
+  $.tweet = {
+    get: Tweet.prototype.get
+  };
 })(jQuery, window, document);

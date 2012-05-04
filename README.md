@@ -92,5 +92,10 @@ All tweets for each user is store in `window.tweets` object.
 
 ### Changelog
 
-* 0.5 - First release
+* 0.6.1 - Rewritten relative_time function, removing some unnecessary code, changing callback functions and renamed $.getTweet to $.tweet.get. $.tweet.get only returns object or array with tweet(s) now. $.tweet prepares a bit for the next version. 
+
+	Using $.each instead of for loop. Every element will get an data-tweet attribute with the tweet id. The guid will not start with 'tweet' anymore only 't' and a timestamp.
+	
+	Added some css to the examples. 
 * 0.6 - Adding build system, Tweet id options, fixing radix errors
+* 0.5 - First release

@@ -2,31 +2,42 @@
 <html>
 	<head>
 		<meta charset="utf-8">
+		<link href="style.css" rel="stylesheet">
+		<title>Many accounts example</title>
 	</head>
 	<body>		
-		<p class="tweet">Loading tweet</p>
-		<hr />
-		<ul class="tweet2">Loading tweet</ul>
-		<hr />
-		<p class="tweet3">Loading tweet</p>
+		<div class="wrapper">
+			<h1>Many accounts example</h1>
+			<h2>Account one</h2>
+			<strong>Basic example, one tweet</strong>
+			<p class="tweet">Loading tweet</p>
+			<h2>Account two</h2>
+			<strong>List and avatar</strong>
+			<ul class="tweets">Loading tweet</ul>
+			<h2>Account three</h2>
+			<strong>Load five tweets from a user and append to same element</strong>
+			<p class="tweet-c">Loading tweet</p>
+			<h1>Example code</h1>
+			<script src="https://gist.github.com/2594987.js?file=many-accounts.js"></script>
+		</div>
 
-		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
-		<script type="text/javascript" src="../build/jquery.tweet.min.js"></script>
-		<script type="text/javascript">
+		<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+		<script src="../build/jquery.tweet.min.js"></script>
+		<script>
 			$(function () {
 				$('.tweet').tweet('frozzare');
-				$('.tweet2').tweet({
+				$('.tweets').tweet({
 						list: true,
 						screen_name: 'repeatit_se',
 						count: 5,
 						avatar: true
 				});
-				$('.tweet3').tweet({
+				$('.tweet-c').tweet({
 					screen_name: 'c_millgardh',
 					count: 5
 				});
 			});
 		</script>
-		
+
 	</body>
 </html>

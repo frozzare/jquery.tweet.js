@@ -2,13 +2,20 @@
 <html>
 	<head>
 		<meta charset="utf-8">
+		<link href="style.css" rel="stylesheet">
+		<title>Avatar example</title>
 	</head>
-	<body>		
-		<ul class="tweets">Loading tweets</ul>
-		
-		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
-		<script type="text/javascript" src="../build/jquery.tweet.min.js"></script>
-		<script type="text/javascript">
+	<body>
+		<div class="wrapper">
+				<h1>Avatar example</h1>
+				<ul class="tweets">Loading tweet</ul>
+				<h1>Example code</h1>
+				<script src="https://gist.github.com/2513363.js?file=avatar.js"></script>
+		</div>
+
+		<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+		<script src="../build/jquery.tweet.min.js"></script>
+		<script>
 			$(function () {
 				$('.tweets').tweet({
 					screen_name: 'frozzare',
@@ -18,6 +25,6 @@
 				});
 			});
 		</script>
-		
+
 	</body>
 </html>

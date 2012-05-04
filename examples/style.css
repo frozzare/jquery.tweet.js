@@ -1,0 +1,64 @@
+@import url(https://fonts.googleapis.com/css?family=Lato:300italic,700italic,300,700);
+
+body {
+  padding:50px;
+  font:14px/1.5 Lato, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color:#777;
+  font-weight:300;
+}
+
+h1, h2 {
+  color:#222;
+}
+
+h1, h2 {
+  line-height:1.1;
+}
+
+h1 {
+  font-size:28px;
+  margin:0 0 40px;
+}
+
+h2 {
+  color:#393939;
+}
+
+strong {
+  margin-bottom: 40px;
+}
+
+a {
+  color:#39c;
+  font-weight:400;
+  text-decoration:none;
+}
+
+.wrapper {
+  width: 640px;
+  margin: 0 auto;
+}
+
+ul.tweets {
+}
+
+ul.tweets li {
+  list-style: none;
+  float: left;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+ul.tweets li img {
+  float: left;
+  margin: -15px 5px 5px 5px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+}
+
+p span {
+  float: left;
+  width: 100%;
+  margin: 5px 0;
+}
