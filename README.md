@@ -71,19 +71,15 @@ Or you can use the shortcut string
 
 ### Advanced
 
-You can get the object that's created when you run `$().tweet()` is store in a unique object that you can access with `$.getTweet()` function. 
+Each object created by `$().tweet` function will be stored in the `window.tweets` object.
 
-If you request the user timeline once, the function will return  object else array.
+`$.tweet.get` is used to load every tweet stored in `window.tweets` for a user. It will return an object or array depending on the amount of tweets.
 	
-	$.getTweet('frozzare')
+	$.tweet.get('frozzare')
 	// => Tweet
 	
-	$.getTweet('frozzare')
+	$.tweet.get('frozzare')
 	// => [Tweet, Tweet]
-	
-Every Tweet object has an array called `tweets` that store all tweets you request from Twitter API.
-
-All tweets for each user is store in `window.tweets` object.
 
 ### Build
 
