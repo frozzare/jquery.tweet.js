@@ -88,7 +88,7 @@ All tweets for each user is store in `window.tweets` object.
 ### Build
 
 	npm install smoosh
-	node build.js
+	make
 
 ### Changelog
 
