@@ -1,0 +1,147 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>jQuery.tweet.js by Frozzare</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>jQuery.tweet.js</h1>
+        <p>A jQuery plugin that displays tweet(s) on your site, blog or wathever</p>
+        <p class="view"><a href="https://github.com/Frozzare/jquery.tweet.js">View the Project on GitHub <small>Frozzare/jquery.tweet.js</small></a></p>
+        <ul>
+          <li><a href="https://github.com/Frozzare/jquery.tweet.js/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/Frozzare/jquery.tweet.js/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/Frozzare/jquery.tweet.js">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>jQuery.tweet.js</h1>
+
+<p>A jQuery plugin that displays tweet(s) on your site, blog or wathever. It's easy to use. It will auto format the hash tag, links and name.</p>
+
+<p>You can load as many accounts at the time you like with this plugin. It will give every account it load a unique id.</p>
+
+<p><strong>Note</strong> It will do one request to the Twitter API for each account.</p>
+
+<h3>Basic use</h3>
+
+<p>This will load one tweet (include rts) from the username you specified and show it.</p>
+
+<pre><code>$('.tweet').tweet('frozzare');
+</code></pre>
+
+<p><a href="https://github.com/Frozzare/jquery.tweet.js/blob/master/examples/basic.html">Example file</a></p>
+
+<h3>Options</h3>
+
+<ul>
+<li>id - Load a specific tweet by the tweet id, must be a string value. Default empty</li>
+<li>screen_name or username - The user to load tweets from</li>
+<li>include_rts - Include retweets or not. Default true</li>
+<li>max_id - Results with an ID less than (that is, older than) or equal to the specified ID.</li>
+<li>since_id - Results with an ID greater than (that is, more recent than) the specified ID.</li>
+<li>count - The amount of tweets to load. Default 1</li>
+<li>show - The amout of tweets to show. Default 0 (show all)</li>
+<li>list - Append li tags around every tweets. Defult false</li>
+<li>avatar - Show avatar. Default false</li>
+<li>https - Use https instead of http. Default false (No need to set this to true when https is the protocol)</li>
+</ul><h3>Examples</h3>
+
+<h4>List example</h4>
+
+<pre><code>&lt;ul class="tweets"&gt;Loading tweets&lt;/ul&gt;
+
+$('.tweets').tweet({
+    screen_name: 'frozzare',
+    list: true,
+    count: 5
+});
+</code></pre>
+
+<p><a href="https://github.com/Frozzare/jquery.tweet.js/blob/master/examples/list.html">Example file</a></p>
+
+<h4>Avatar example</h4>
+
+<pre><code>&lt;ul class="tweets"&gt;Loading tweets&lt;/ul&gt;
+
+$('.tweet').tweet({
+    screen_name: 'frozzare',
+    avatar: true,
+    list: true,
+    count: 5
+});
+
+&lt;p class="tweet"&gt;&lt;img src="…"&gt; tweet&lt;/p&gt;
+</code></pre>
+
+<p><a href="https://github.com/Frozzare/jquery.tweet.js/blob/master/examples/avatar.html">Example file</a></p>
+
+<h4>Tweet ID example</h4>
+
+<pre><code>&lt;p class="tweet"&gt;Loading tweets&lt;/p&gt;
+
+$('.tweet').tweet({ id: '194120642130477056' });
+</code></pre>
+
+<p>Or you can use the shortcut string</p>
+
+<pre><code>$('.tweet').tweet('id:194120642130477056');
+</code></pre>
+
+<p><a href="https://github.com/Frozzare/jquery.tweet.js/blob/master/examples/tweetid.html">Example file</a></p>
+
+<h3>Advanced</h3>
+
+<p>Each object created by <code>$().tweet</code> function will be stored in the <code>window.tweets</code> object.</p>
+
+<p><code>$.tweet.get</code> is used to load every tweet stored in <code>window.tweets</code> for a user. It will return an object or array depending on the amount of tweets.</p>
+
+<pre><code>$.tweet.get('frozzare')
+// =&gt; Tweet
+
+$.tweet.get('frozzare')
+// =&gt; [Tweet, Tweet]
+</code></pre>
+
+<h3>Build</h3>
+
+<pre><code>npm install -g grunt
+make
+</code></pre>
+
+<h3>Changelog</h3>
+
+<ul>
+<li>0.6.2 - Improved documentation using dox syntax. Removed smoosh and changed to grunt for build. Fixed "Move the invocation into the parens that contain the function.". Build dir is now dist and changed the src in each example to dist instead of build. Adding .gitignore.</li>
+<li>
+<p>0.6.1 - Rewritten relative_time function, removing some unnecessary code, changing callback functions and renamed $.getTweet to $.tweet.get. $.tweet.get only returns object or array with tweet(s) now. $.tweet prepares a bit for the next version.</p>
+
+<p>Using $.each instead of for loop. Every element will get an data-tweet attribute with the tweet id. The guid will not start with 'tweet' anymore only 't' and a timestamp.</p>
+
+<p>Added some css to the examples.</p>
+</li>
+<li><p>0.6 - Adding build system, Tweet id options, fixing radix errors</p></li>
+<li><p>0.5 - First release</p></li>
+</ul>
+      </section>
+    </div>
+    <footer>
+      <p>Project maintained by <a href="https://github.com/Frozzare">Frozzare</a></p>
+      <p>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><!--<![endif]-->
+    
+  </body>
+</html>
