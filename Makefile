@@ -1,4 +1,4 @@
 all:
-	node build.js
+	grunt
 
-.PHONY: all prepare
+.PHONY: all

@@ -1,0 +1,25 @@
+{
+  "name": "jquery.tweet",
+  "title": "jQuery tweet",
+  "description": "A jQuery plugin that displays tweet(s) on your site, blog or wathever",
+  "version": "0.6.2",
+  "homepage": "https://github.com/frozzare/jquery.tweet.js",
+  "author": {
+    "name": "Fredrik Forsmo",
+    "email": "fredrik.forsmo@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/frozzare/jquery.tweet.js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/frozzare/jquery.tweet.js/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/frozzare/jquery.tweet.js/blob/master/LICENSE-MIT"
+    }
+  ],
+  "keywords": []
+}

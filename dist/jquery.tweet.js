@@ -1,9 +1,10 @@
 /*!
- * jQuery tweet
- * Copyright 2012 Fredrik Forsmo, @frozzare
- * Version: 0.6.1
- * Licensed under the MIT license http://frozzare.mit-license.org
- */
+* jQuery tweet
+* Copyright (c) 2012 Fredrik Forsmo
+* Version: 0.6.1
+* Licensed MIT
+*/
+
 (function ($, window, document, undefined) {
 
   "use strict";
@@ -14,13 +15,20 @@
         screen_name: '',        // [string] Load tweets from this user.
         include_rts: true,      // [boolean] Include Retweets.
         max_id: 0,              // [integer] Results with an ID less than (that is, older than) or equal to the specified ID.
-        since_id: 0,            // [integer] Results with an ID greater than (that is, more recent than) the specified ID. 
+        since_id: 0,            // [integer] Results with an ID greater than (that is, more recent than) the specified ID.
         count: 1,               // [integer] The amount of tweets to load.
         show: 0,                // [integer] The amount of tweets to show.
         list: false,            // [boolean] Append li tags around every tweets.
         avatar: false,          // [boolean] Show avatar.
         https: false            // [boolean] Use https instead of http. https will be used when https protocol is used.
       };
+
+  /**
+   * Create a new Tweet object
+   *
+   * @param {Object} element
+   * @param {Object} options
+   */
 
   function Tweet(element, options) {
 
@@ -52,16 +60,30 @@
     }
 
     this.options = $.extend({}, defaults, options);
-    
-    $.getScript(this.url());      
+
+    $.getScript(this.url());
   }
 
   Tweet.prototype = {
-    
+
+    /**
+     * Check if the object is a array or not
+     *
+     * @param {Object} a
+     * @return {Boolean}
+     */
+
     isArray: function (a) {
       return a instanceof Array;
     },
-    
+
+    /**
+     * Parse tweet object to status html
+     *
+     * @param {Object} tweet
+     * @return {String}
+     */
+
     status: function (tweet) {
       var self = this,
           status = tweet.text.replace(/((https?|s?ftp|ssh)\:\/\/[^"\s\>]*[^.,;'">\:\s\>\)\]\!])/g, function (url) {
@@ -81,8 +103,15 @@
       return status;
     },
 
+    /**
+     * Get relative time string
+     *
+     * @param {Number} time_value
+     * @return {String}
+     */
+
     relative_time: function (time_value) {
-      // Modified versio nof relative time function from Twitters JavaScript blogger.js file      
+      // Modified versio nof relative time function from Twitters JavaScript blogger.js file
       var values = time_value.split(" "),
           parsed_date = Date.parse(values[1] + ' ' + values[2] + ', ' + values[5] + ' ' + values[3]),
           delta = (parseInt((new Date().getTime() - parsed_date) / 1000, 10) * 2) + (new Date().getTimezoneOffset() * 60);
@@ -103,6 +132,12 @@
         return (parseInt(delta / 86400, 10)).toString() + ' days ago';
       }
     },
+
+    /**
+     * Generate Twitter api url
+     *
+     * @return {String}
+     */
 
     url: function () {
       var params = $.extend({}, this.options),
@@ -131,6 +166,12 @@
       }
     },
 
+    /**
+     * JSONP Callback. Add each tweet to `this.element` after it have gone through the status makeover.
+     *
+     * @param {Array|Object} data
+     */
+
     twitterCallback: function (data) {
       var show = this.options.show !== 0 ? this.options.show : this.isArray(data) ? data.length : 1;
 
@@ -139,14 +180,14 @@
       } else {
         this.tweets = [data];
       }
-      
+
       if (this.options.id !== null) {
         // Multi ID support will come
         this.options.screen_name = this.tweets[0].user.screen_name;
       }
-      
+
       this.element.empty();
-      
+
       for (var i = 0; i < show; i++) {
         if (this.options.list) {
           this.element.append($('<li />', { 'data-tweet': this.tweets[i].id_str }).append(this.status(this.tweets[i])));
@@ -155,6 +196,13 @@
         }
       }
     },
+
+    /**
+     * Get all tweets from `screen_name`
+     *
+     * @param {String} screen_name
+     * @return {Array}
+     */
 
     get: function (screen_name) {
       var tweets = [],
@@ -167,10 +215,17 @@
           });
         }
       });
-      
+
       return tweets.length === 1 ? tweets[0] : tweets;
     }
   };
+
+  /**
+   * Create jQuery tweet function
+   *
+   * @param {Object} options
+   * @return {Array}
+   */
 
   $.fn.tweet = function (options) {
     return this.each(function () {
@@ -181,7 +236,11 @@
 
   window.tweets = {};
 
+  /**
+   * Create `$.tweet` object with tweet utilities.
+   */
+
   $.tweet = {
     get: Tweet.prototype.get
   };
-})(jQuery, window, document);
+}(jQuery, window, document));
