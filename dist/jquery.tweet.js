@@ -1,7 +1,7 @@
 /*!
 * jQuery tweet
 * Copyright (c) 2012 Fredrik Forsmo
-* Version: 0.6.1
+* Version: 0.6.2
 * Licensed MIT
 */
 
